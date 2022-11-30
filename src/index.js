@@ -8,11 +8,17 @@ import debounce from 'lodash.debounce';
 const DEBOUNCE_DELAY = 300;
 refs.searchBox.addEventListener('input', debounce(onInputCountry, DEBOUNCE_DELAY));
 
-function onInputCountry() {
-  const countryName = refs.searchBox.value;
-  if (countryName === '') {
+function emptyCountry() {
     refs.countryInfo.innerHTML = '';
     refs.countryList.innerHTML = '';
+    return;
+}
+function onInputCountry() {
+  const countryName = refs.searchBox.value.trim();
+  if (countryName === '') {
+    // refs.countryInfo.innerHTML = '';
+    // refs.countryList.innerHTML = '';
+    emptyCountry();
     return;
   }
 
@@ -20,8 +26,9 @@ function onInputCountry() {
     .then(countrys => {
       if (countrys.length > 10) {
         Notify.info('Too many matches found. Please enter a more specific name.');
-        refs.countryInfo.innerHTML = '';
-        refs.countryList.innerHTML = '';
+        // refs.countryInfo.innerHTML = '';
+        // refs.countryList.innerHTML = '';
+        emptyCountry();
         return;
       }
 
@@ -39,8 +46,9 @@ function onInputCountry() {
     })
     .catch(error => {
       Notify.failure('Oops, there is no country with that name');
-      refs.countryInfo.innerHTML = '';
-      refs.countryList.innerHTML = '';
+    //   refs.countryInfo.innerHTML = '';
+    //   refs.countryList.innerHTML = '';
+    emptyCountry();
       return error;
     });
 }
